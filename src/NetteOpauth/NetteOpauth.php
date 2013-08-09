@@ -74,9 +74,9 @@ class NetteOpauth
 
 		switch ($Opauth->env['callback_transport']) {
 			case 'session':
-                if(!isset($_SESSION['opauth'])) {
-                    throw new \Exception('Repeated bad request');
-                }
+				if(!isset($_SESSION['opauth'])) {
+					throw new \Exception('Repeated bad request');
+				}
 				$response = $_SESSION['opauth'];
 				unset($_SESSION['opauth']);
 				break;
