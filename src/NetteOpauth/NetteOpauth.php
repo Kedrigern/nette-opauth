@@ -74,6 +74,9 @@ class NetteOpauth
 
 		switch ($Opauth->env['callback_transport']) {
 			case 'session':
+                if(!isset($_SESSION['opauth'])) {
+                    throw new \Exception('Repeated bad request');
+                }
 				$response = $_SESSION['opauth'];
 				unset($_SESSION['opauth']);
 				break;
@@ -88,8 +91,6 @@ class NetteOpauth
 				break;
 		}
 
-
-
 		if (array_key_exists('error', $response)) {
 			throw new \Exception($response['message']);
 		}
@@ -99,8 +100,6 @@ class NetteOpauth
 		} elseif (!$Opauth->validate(sha1(print_r($response['auth'], true)), $response['timestamp'], $response['signature'], $reason)) {
 			throw new \Exception('Invalid auth response: ' . $reason);
 		}
-
-		\Nette\Diagnostics\Debugger::barDump($response['auth'], 'authInfo');
 
 		return $this->createIdentity($response['auth']);
 	}
